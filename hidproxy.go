@@ -703,12 +703,12 @@ func Start(config Config) {
 				if _, ok := output[devId]; !ok {
 					output[devId] = make(chan error, 10)
 					close[devId] = make(chan bool, 10)
-					if isKeyboard && !isMouse && config.SetupKeyboard {
+					if isKeyboard && config.SetupKeyboard {
 						go HandleKeyboard(output[devId], keyboardInput, close[devId], uint(config.KbdRepeat), uint(config.KbdDelay), *dev)
 						wg.Add(1)
 					}
 					log.Debugf("isKeyboard: %t, isMouse: %t, setupMouse: %t", !isKeyboard, isMouse, config.SetupMouse)
-					if isMouse && config.SetupMouse {
+					if isMouse && !isKeyboard && config.SetupMouse {
 						go HandleMouse(output[devId], mouseInput, close[devId], *dev)
 						wg.Add(1)
 					}
